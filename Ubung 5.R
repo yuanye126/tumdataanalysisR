@@ -50,7 +50,8 @@ complete <- cutree(hc_complete$tree_row,k =3)
 rownames(irismat) <- 1:nrow(irismat)
 rownames(irismat)
 row.ann <- data.table(Species = iris_table$Species)
-row.ann[,complete := factor(complete)]
+# just the column name of the data table complete, to check how accurate our clustering is.
+row.ann[,complete := factor(complete)] #complete use to be a list of int, pointting to which cluster, and use factor may let the type of complete into a categroical value. 
 # create a data table to compare the clustering result & true species of each row
 #create heapmaps with annotation
 pheatmap(irismat, clustering_method = "complete", scale =  "column", annotation_row = row.ann, show_rownames = FALSE)
