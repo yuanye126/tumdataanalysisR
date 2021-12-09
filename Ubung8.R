@@ -57,4 +57,14 @@ test_growth <- function(mk, test){
 
 test_growth("mrk_1653",'wilcoxon')
 
-
+#Section 3
+cor.test(iris$Sepal.Width , iris$Sepal.Length,method = "spearman")
+cor(iris$Sepal.Length,iris$Sepal.Width, method = "pearson") # normality
+#section 3.2
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) + geom_point() + geom_smooth(method = "lm")+ facet_wrap(~Species)
+iris_dt <- data.table(iris)
+iris_setosa <- iris_dt[Species == "setosa"]
+cor(iris_setosa$Sepal.Length, iris_setosa$Sepal.Width, method = "spearman")
+cor.test(iris_setosa$Sepal.Length, iris_setosa$Sepal.Width, method = "spearman")
+corr_dt <- iris_dt[, cor.test(Sepal.Length, Sepal.Width, method = "pearson"), by = Species]
+corr_dt
