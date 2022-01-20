@@ -33,7 +33,7 @@ summary(logistic_fit)
 #interpretation : an increase of glucose in 1 mg/dl would change increasing your odds of having diabetes by 4%
 
 #Section 4
-diabetes_predicted <- predict(logistic_fit, data = diabetes_dt, type = "response")
+diabetes_predicted <- predict(logistic_fit, data = diabetes_dt)
 summary(diabetes_predicted)
 diabetes_dt[,predicted := diabetes_predicted]
 ggplot(diabetes_dt, aes(predicted, fill = Outcome)) + geom_histogram(position = "dodge")
@@ -41,9 +41,24 @@ ggplot(diabetes_dt, aes(predicted, fill = Outcome)) + geom_histogram(position = 
 ggplot(diabetes_dt,aes(Glucose, predicted)) + geom_point() 
 
 
+
+
 confusion_matrix <- function(dt, score_column, labels_column, threshold){
-  confusion_matrix(dt[,get(score_column)], dt[,get(labels_column)])
+  return(dt[,table(get(labels_column), get(score_column) > threshold)])
   
   
 }
 confusion_matrix(diabetes_dt,"predicted","Outcome",0)
+
+
+tpr_fpr <- function(dt, score_column, labels_column, threshold){ 
+haha <- confusion_matrix(dt,score_column,labels_column,threshold)
+tpr <- haha["1","TRUE"]
+fpr <- haha[2][1] # TODO
+return(data.table(tpr=tpr, fpr=fpr, t=threshold))
+
+}
+tpr_fpr(diabetes_dt,"predicted","Outcome",0)
+#table function helps to build a contigency table of counts at each combination of favtor levels
+
+
